@@ -1,0 +1,24 @@
+        </div>
+        {% extends "template.html" %}
+        {% block conteudo %}
+        <table class="table table-striped table-responsive table-bordered">
+            <thead class="thead-default">
+                <tr align='left'>
+                    <th align='left'>Nome</th>
+                    <th align='left'>Categoria</th>
+                    <th align='left'>Console</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Inicio do for para o python -->
+                {% for jogo in jogos: %}
+                <tr>
+                    <td>{{jogo.nome.title()}}</td>
+                    <td>{{jogo.categoria.title()}}</td>
+                    <td>{{jogo.console.title()}}</td>
+                </tr>
+                {% endfor %}
+                <!-- Fim do for para o python -->
+            </tbody>
+        </table>
+        {% endblock %}
