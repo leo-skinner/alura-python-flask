@@ -1,10 +1,7 @@
 from flask import Flask, render_template, request, redirect, session, flash, url_for
 from models import Jogo, Usuario
-from prepara_banco import Prepara_Banco
 from dao import JogoDao
 from  flask_mysqldb import MySQL
-
-Prepara_Banco
 
 #inicializa um flask
 app = Flask(__name__)
