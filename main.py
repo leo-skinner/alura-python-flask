@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, session, flash, url_for
 from models import Jogo, Usuario
-from dao import JogoDao
-from  flask_mysqldb import MySQL
+from dao import JogoDao, UsuarioDao
+from flask_mysqldb import MySQL
 
 #inicializa um flask
 app = Flask(__name__)
@@ -14,23 +14,28 @@ app.config['MYSQL_USER'] = "root"
 app.config['MYSQL_PASSWORD'] = "admin"
 app.config['MYSQL_DB'] = "jogoteca"
 
-#criando um objeto DB   
+#criando um objeto DB
 db = MySQL(app)
-#criando uma instancia de DAO  
+
+#criando uma instancia de jogoDAO
 jogo_dao = JogoDao(db)
 
-#Criando usuários para testar...
+#criando uma instancia de usuarioDAO
+usuario_dao = UsuarioDao(db)
+
+# Criando usuários para testar...
 # u1 = Usuario('leo', 'Leo Skinner', 'leo')
 # u2 = Usuario('augusto', 'Augusto Skinner', 'java')
 # u3 = Usuario('isabel', 'Isabel Pimenta', 'bebel')
 # usuarios = {u1.id: u1, u2.id: u2, u3.id: u3}
 # lista = []
 
-#indica a rota onde aparecerá a tela.
+
+# indica a rota onde aparecerá a tela.
 @app.route('/')
 def index():
-
-    #retorna a html e o valor da variavel titulo dentro da html.
+    lista = jogo_dao.listar()
+    # retorna a html e o valor da variavel titulo dentro da html.
     return render_template('lista.html', titulo='Jogos', jogos=lista)
 
 
@@ -64,10 +69,13 @@ def login():
 
 
 @app.route(
-    '/autenticar', methods=['POST',])
+    '/autenticar', methods=[
+        'POST',
+    ])
 def autenticar():
-    if request.form['usuario'] in usuarios:
-        usuario = usuarios[request.form['usuario']]
+    usuario = usuario_dao.buscar_por_id(request.form['usuario'])
+
+    if usuario: #existe...
 
         if usuario.senha == request.form['senha']:
             session['usuario_logado'] = usuario.id
