@@ -1,7 +1,8 @@
 from flask import Flask, render_template, request, redirect, session, flash, url_for
-from jogo import Jogo
-from usuario import Usuario
+from models import Jogo, Usuario
 from prepara_banco import Prepara_Banco
+from dao import JogoDao
+from  flask_mysqldb import MySQL
 
 Prepara_Banco
 
@@ -9,15 +10,24 @@ Prepara_Banco
 app = Flask(__name__)
 app.secret_key = 'skinner'
 
+#Configurando o banco de dados
+app.config['MYSQL_HOST'] = "0.0.0.0"
+app.config['MYSQL_PORT'] = 3306
+app.config['MYSQL_USER'] = "root"
+app.config['MYSQL_PASSWORD'] = "admin"
+app.config['MYSQL_DB'] = "jogoteca"
+
+#criando um objeto DB   
+db = MySQL(app)
+#criando uma instancia de DAO  
+jogo_dao = JogoDao(db)
+
 #Criando usuários para testar...
-u1 = Usuario('leo', 'Leo Skinner', 'leo')
-u2 = Usuario('augusto', 'Augusto Skinner', 'java')
-u3 = Usuario('isabel', 'Isabel Pimenta', 'bebel')
-
-usuarios = {u1.id: u1, u2.id: u2, u3.id: u3}
-
-lista = []
-
+# u1 = Usuario('leo', 'Leo Skinner', 'leo')
+# u2 = Usuario('augusto', 'Augusto Skinner', 'java')
+# u3 = Usuario('isabel', 'Isabel Pimenta', 'bebel')
+# usuarios = {u1.id: u1, u2.id: u2, u3.id: u3}
+# lista = []
 
 #indica a rota onde aparecerá a tela.
 @app.route('/')
@@ -46,7 +56,7 @@ def criar():
     console = request.form['console']
 
     jogo = Jogo(nome, categoria, console)
-    lista.append(jogo)
+    jogo_dao.salvar(jogo)
     return redirect(url_for('index'))
     #render_template('lista.html', titulo='jogos', jogos=lista)
 

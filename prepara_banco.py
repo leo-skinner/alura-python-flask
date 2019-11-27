@@ -2,7 +2,7 @@ import MySQLdb
 
 class Prepara_Banco:
 
-    print('Conectando...')
+    print('Conectando ao banco...')
     conn = MySQLdb.connect(user='root', passwd='admin', host='127.0.0.1', port=3306)
 
     # Descomente se quiser desfazer o banco...
