@@ -3,8 +3,6 @@ from jogo import Jogo
 from usuario import Usuario
 from prepara_banco import Prepara_Banco
 
-Prepara_Banco
-
 #inicializa um flask
 app = Flask(__name__)
 app.secret_key = 'skinner'
